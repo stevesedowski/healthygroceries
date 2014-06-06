@@ -1,0 +1,96 @@
+<header></header>
+<section class="main" ng-controller="GroceryCtrl">
+	<div id="wrapper">
+		<div class="header">
+			<h1>Your Grocery List!</h1>
+			<span id="form_intro">Fill out the form below to track your groceries and denote which items are healthy. The more green the better!</<span>
+		</div>
+		<div class="food">
+			<ul ng-repeat="food in foods">
+				<li>
+					<a href="#" ng-click="addFood($event, food)">{{food.food}}</a>
+				</li>
+			</ul>
+		</div>
+		<div>
+			
+
+		</div>
+		<div class="form_container">
+			<form name="grocery_list" ng-submit="addItem($event)">
+				<span id="form_text" style="margin-top:20px;">You want to buy...?</span><br>
+				<input class="input item" type="text" ng-model="item" placeholder="ie: Apples, Oranges, etc" required/>
+				
+				<br/>
+				<div >
+					<div class="costs">
+						<span id="form_text">Cost?</span>
+						<br/>
+						<input class="input_cost" placeholder="$.$$" type="text" required ng-model="cost"/>
+					</div>
+					<div  class="all-costs" 
+						ng-show="showTotal"
+						ng-animate="{show: 'show-costs', hide: 'hide-costs}'">
+						<div class="listed-costs">
+							<span id="form_text">Total Cost: </span>
+							<span id="total_bill">{{ totalCost | currency }}</span>
+						</div>
+						<div class="listed-costs">
+							<span  id="form_text">Healthy Cost: </span>
+							<span id="healthy-costs">{{ healthyCost | currency }}</span>
+						</div>
+						<div class="listed-costs">
+							<span  id="form_text">Unhealthy Cost: </span>
+							<span id="bad-costs">{{ badCost | currency }}</span>
+						</div>
+						
+					</div>
+					<div class="lower-div">
+						<div>
+							<span id="form_text">Is this healthy?</span><input class="checker" type="checkbox" ng-model="healthy"/>
+						</div>
+					</div>
+				</div>
+
+				<br/>
+
+				<button ng-click="addItem($event)">Add It!</button>
+			</form>
+		</div>
+		<div class="list">
+			<ul ng-repeat="i in groceries">
+				<li ng-class="{
+					healthy: i.healthy === true,
+					bought: i.bought === true,
+					bad: i.healthy === false}">
+					<input type="checkbox" ng-checked="{{i.bought}}" ng-click="toggleBought(i)" ng-model="i.bought">
+					{{i.item}}
+					&nbsp;
+					<span class="price">{{i.price | currency}}</span>
+					<span class="right" ng-click="deleteItem($index, i)">x</span>
+				</li>
+			</ul>
+		</div>
+	</div>
+</section>
+	
+<!-- here are the steps to setting up an ANgularJS app in rails
+1. add the 'gem 'angularjs-rails' gem
+2. run BUNDLE INSTALL	
+3. go into application.js and require angular  and angular-resource 
+	1. //=require angular
+	2. //=require angular-resource
+4. add resources: items to the routes.rb file (here, 'items' is what I named my array that's used)
+5. add in the ng-app directive and name
+6. create the rails scaffold >> rails g scaffold Item title:string (can add more database columns here)
+7. run rake routes & db migrate >>
+>>rake routes
+>>rake db:migrate
+8. REmember: I may have to shut down and restart the server. So, reboot the server.
+9. have to add in this token and statement to the js file:
+
+app.config(function ($httpProvider) {
+  // CSRF
+  $httpProvider.defaults.headers.common['X-CSRF-Token'] = $('meta[name=csrf-token]').attr('content');
+});
+-->
